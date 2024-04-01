@@ -21,7 +21,6 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // Crear un proceso hijo
     pid = fork();
 
     if (pid == -1) {
@@ -36,7 +35,7 @@ int main(int argc, char* argv[]) {
         dup2(pipefd[1], STDOUT_FILENO);
 
         // Ejecutar el programa para obtener el porcentaje de utilización de CPU
-        execl("./cpu", "cpu", (char *)0);
+        execl("./cpu", "cpu", argv[2], (char *)0);
 
         // Si el execl falla, imprimir un error y salir
         perror("Error al ejecutar el programa hijo");
