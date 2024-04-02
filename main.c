@@ -4,12 +4,12 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 512
 
 int main(int argc, char* argv[]) {
     if(argc <= 1){
-	perror("parámetros");
-	exit(EXIT_FAILURE);
+	    perror("parámetros");
+	    exit(EXIT_FAILURE);
     }
     int pipefd[2];
     pid_t pid;
@@ -28,18 +28,33 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if (pid == 0 && strcmp(argv[1], "cpu") == 0) { // Código del proceso hijo
+    if (pid == 0 ) { // Código del proceso hijo
+        
         close(pipefd[0]); // Cerrar el descriptor de lectura del pipe en el proceso hijo
 
-        // Redirigir la salida estándar al pipe
-        dup2(pipefd[1], STDOUT_FILENO);
+        
+        dup2(pipefd[1], STDOUT_FILENO); // Redirigir la salida estándar al pipe
+        if(strcmp(argv[1], "cpu") == 0){
+        
 
         // Ejecutar el programa para obtener el porcentaje de utilización de CPU
-        execl("./cpu", "cpu", argv[2], (char *)0);
+        execl("./cpu", "cpu", argv[2], NULL);
 
         // Si el execl falla, imprimir un error y salir
         perror("Error al ejecutar el programa hijo");
         exit(EXIT_FAILURE);
+
+        }else if(strcmp(argv[1], "disk") == 0){
+            if(argc <= 2){
+	            perror("parámetros");
+	            exit(EXIT_FAILURE);
+            }
+            execl("./disk", "disk", argv[2], NULL);
+            // Si el execl falla, imprimir un error y salir
+            perror("Error al ejecutar el programa hijo");
+            exit(EXIT_FAILURE);
+        }
+        
     } else { // Código del proceso padre
         close(pipefd[1]); // Cerrar el descriptor de escritura del pipe en el proceso padre
 
@@ -47,7 +62,7 @@ int main(int argc, char* argv[]) {
 
         // Leer el resultado del pipe
         read(pipefd[0], buffer, BUFFER_SIZE);
-        printf("Porcentaje de utilización de CPU: %s%%\n", buffer);
+        printf("\nInformacion del proceso hijo:\n%s\n", buffer);
 
         close(pipefd[0]); // Cerrar el descriptor de lectura del pipe en el proceso padre
     }
