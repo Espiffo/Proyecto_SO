@@ -1,3 +1,5 @@
+.PHONY: all clean
+
 # Compilador
 CC = gcc
 
@@ -5,7 +7,26 @@ CC = gcc
 BIN_DIR = /usr/local/bin
 
 # Archivos fuente
-SRCS = main.c cpu.c ram.c disk.c
+SRCS = main.c disk.c
+# cpu.c ram.c
 
 # Nombres de los programas finales
-TARGETS = main cpu ram disk
+TARGETS = main disk
+#cpu ram 
+
+# Opciones de compilación
+CFLAGS = -Wall
+
+# Regla all para construir todos los targets
+all: $(TARGETS)
+
+# Reglas para construir los ejecutables
+main: main.c
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/main main.c
+
+disk: disk.c
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/disk disk.c
+
+# Regla para limpiar los archivos compilados
+clean:
+	rm -f $(BIN_DIR)/$(TARGETS)
