@@ -15,6 +15,7 @@ double bytes_to_MiB(unsigned long);
 double bytes_to_GiB(unsigned long);
 
 int main(int argc, char* argv[]) {
+   
     // Definir la ruta del sistema de archivos montado en el disco sda
     const char *mount_point = "/";
 

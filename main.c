@@ -8,8 +8,9 @@
 
 int main(int argc, char* argv[]) {
     if(argc <= 1){
-	    perror("parámetros");
-	    exit(EXIT_FAILURE);
+	    fprintf(stderr, "Error de parámetros: se requiere al menos un argumento.\n");
+        exit(EXIT_FAILURE);
+        return 1;
     }
     int pipefd[2];
     pid_t pid;
@@ -46,8 +47,9 @@ int main(int argc, char* argv[]) {
 
         }else if(strcmp(argv[1], "disk") == 0){
             if(argc <= 2){
-	            perror("parámetros");
-	            exit(EXIT_FAILURE);
+	            fprintf(stderr, "Error de parámetros: se requieren más argumentos\n");
+                exit(EXIT_FAILURE);
+                return 1;
             }
             execl("./disk", "disk", argv[2], NULL);
             // Si el execl falla, imprimir un error y salir
@@ -62,7 +64,7 @@ int main(int argc, char* argv[]) {
 
         // Leer el resultado del pipe
         read(pipefd[0], buffer, BUFFER_SIZE);
-        printf("\nInformacion del proceso hijo:\n%s\n", buffer);
+        printf("\n%s\n", buffer);
 
         close(pipefd[0]); // Cerrar el descriptor de lectura del pipe en el proceso padre
     }
