@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#define BUFFER_SIZE 512
+#define BUFFER_SIZE 1024
 
 int main(int argc, char* argv[]) {
     if(argc <= 1){
@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     }
     int pipefd[2];
     pid_t pid;
-    char buffer[BUFFER_SIZE];
+    char buffer[BUFFER_SIZE] = {0};
 
     // Crear el pipe
     if (pipe(pipefd) == -1) {
