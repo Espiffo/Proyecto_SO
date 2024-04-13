@@ -63,7 +63,14 @@ int main(int argc, char* argv[]) {
         wait(NULL); // Esperar a que el proceso hijo termine
 
         // Leer el resultado del pipe
-        read(pipefd[0], buffer, BUFFER_SIZE);
+        // Leer el resultado del pipe
+	int numBytes = read(pipefd[0], buffer, BUFFER_SIZE - 1);  // Leave space for '\0'
+	if (numBytes >= 0) {
+    		buffer[numBytes] = '\0';  // Null-terminate the string
+	} else {
+    		perror("read");  // Handle read error
+	}
+
         printf("\n%s\n", buffer);
 
         close(pipefd[0]); // Cerrar el descriptor de lectura del pipe en el proceso padre
