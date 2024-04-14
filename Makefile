@@ -7,11 +7,11 @@ CC = gcc
 BIN_DIR = /usr/local/bin
 
 # Archivos fuente
-SRCS = main.c disk.c cpu.c
-# cpu.c ram.c
+SRCS = main.c disk.c cpu.c memoria.c
+
 
 # Nombres de los programas finales
-TARGETS = main disk cpu
+TARGETS = main disk cpu memoria
 #cpu ram 
 
 # Opciones de compilación
@@ -29,6 +29,9 @@ disk: disk.c
 
 cpu: cpu.c
 	$(CC) $(CFLAGS) -o $(BIN_DIR)/cpu cpu.c
+
+memoria: memoria.c
+	$(CC) $(CFLAGS) -o $(BIN_DIR)/memoria memoria.c
 
 # Regla para limpiar los archivos compilados
 clean:

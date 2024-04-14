@@ -71,6 +71,8 @@ char* used_space(char* opcion, struct statvfs fs_info){
     	
     	//Construir cadena
     	snprintf(str, BUFFER_SIZE, "El espacio utilizado en el disco duro es de aproximadamente %.2f GiB.\n", used_space);
+    }else{
+        snprintf(str, BUFFER_SIZE, "Error: parámtreos incorrectos\n");
     }
     
     return str;
@@ -101,6 +103,8 @@ char* free_space(char* opcion, struct statvfs fs_info){
     	
     	//Construir cadena
     	snprintf(str, BUFFER_SIZE, "El espacio libre en el disco duro es de aproximadamente %.2f GiB.\n", free_space);
+    }else{
+        snprintf(str, BUFFER_SIZE, "Error: parámtreos incorrectos\n");
     }
     
     return str;

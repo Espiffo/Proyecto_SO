@@ -37,15 +37,19 @@ int main(int args, char *argv[]) {
         }
         
         char nombre[256];
-        getProcessNameByPid(pid, nombre, sizeof(nombre));
+        if(getProcessNameByPid(pid, nombre, sizeof(nombre)) != 0){
+            fprintf(stderr, "Error de parámetros: el proceso no existe\n");
+            exit(EXIT_FAILURE);
+            return 1;
+        }
         
         if(wasExecutedInLastFiveMinutes(pid) == 1){
 
-            printf("Proceso: %s\nHa sido ejecutado en los últimos 5 minutos\n", nombre);
+            printf("Proceso: %s\nPID: %d\nHa sido ejecutado en los últimos 5 minutos\n", nombre, pid);
 
         }else{
 
-            printf("Process: %s\nNo ha sido ejecutado en los últimos 5 minutos\n", nombre);
+            printf("Proceso: %s\n\nPID: %d\nNo ha sido ejecutado en los últimos 5 minutos\n", nombre, pid);
 
         }
 
@@ -153,9 +157,8 @@ int wasExecutedInLastFiveMinutes(int pid) {
         if (strstr(line, "se.exec_start")) {
             sscanf(line, "se.exec_start : %lf", &last_exec_start);
             fclose(fp);
-            struct timespec now;
             clock_gettime(CLOCK_BOOTTIME, &now); //retrieve the time since boot in seconds
-            double now_in_ns = now.tv_sec * 1e9 + now.tv_nsec; //conversion from seconds to nanoseconds 
+            now_in_ns = now.tv_sec * 1e9 + now.tv_nsec; //conversion from seconds to nanoseconds 
             double last_exec_start_ns = last_exec_start * 1e6; //conversion from milliseconds to nanoseconds
             double time_since_last_exec = now_in_ns - last_exec_start_ns;
             
